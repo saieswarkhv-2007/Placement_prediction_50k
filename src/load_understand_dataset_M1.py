@@ -7,7 +7,7 @@ import seaborn as sns
 # 1. Load Dataset
 
 print("1. Load the Dataset")
-file_path = '/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv'
+file_path = '/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv'
 
 try:
     # Read the CSV file into a DataFrame

@@ -9,8 +9,8 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 
 # Read original dataset
-input_file = "/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv"
-output_file = "/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/final_preprocess_M2.csv"
+input_file = "/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv"
+output_file = "/Users/khvsaieswar/Desktop/Placement_prediction/dataset/final_preprocess_M2.csv"
 
 
 df = pd.read_csv(input_file)

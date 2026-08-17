@@ -12,7 +12,7 @@ from sklearn.impute import SimpleImputer
 # ==========================================================
 
 
-df = pd.read_csv("/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv")
+df = pd.read_csv("/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv")
 
 
 # Create a copy for processing
@@ -160,7 +160,7 @@ print(final_output.isnull().sum())
 
 
 final_output.to_csv(
-    "/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/clean_ordinal_encode_M2.csv",
+    "/Users/khvsaieswar/Desktop/Placement_prediction/dataset/clean_ordinal_encode_M2.csv",
     index=False
 )
 

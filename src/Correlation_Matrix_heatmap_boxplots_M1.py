@@ -4,9 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-output_dir = "/Users/khvsaieswar/Desktop/Placement_prediction_recovered/outputs/Boxplots_correlation/"
+output_dir = "/Users/khvsaieswar/Desktop/Placement_prediction/outputs/Boxplots_correlation/"
 os.makedirs(output_dir, exist_ok=True)
-df = pd.read_csv('/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv')
+df = pd.read_csv('/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv')
 
 
 print("Dataset Loaded Successfully. Shape:", df.shape)

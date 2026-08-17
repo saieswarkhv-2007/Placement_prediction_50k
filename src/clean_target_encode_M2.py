@@ -8,7 +8,7 @@ import numpy as np
 # ==========================================================
 
 
-df = pd.read_csv("/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv")
+df = pd.read_csv("/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv")
 
 
 # Create a copy
