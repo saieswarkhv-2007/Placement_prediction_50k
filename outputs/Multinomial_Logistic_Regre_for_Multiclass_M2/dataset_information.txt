@@ -1,0 +1,119 @@
+PREPROCESSED PLACEMENT DATASET INFORMATION
+===========================================================================
+
+Dataset file: /Users/khvsaieswar/Desktop/Placement_prediction/dataset/final_preprocess_M2.csv
+Rows: 50000
+Columns: 32
+Target column: CGPA_Tier
+Number of classes: 3
+
+Column names:
+- StudentID
+- Gender
+- City
+- CollegeTier
+- Stream
+- Specialisation
+- Hostel
+- HistoryOfBacklogs
+- SGPA_Sem1
+- SGPA_Sem2
+- SGPA_Sem3
+- SGPA_Sem4
+- SGPA_Sem5
+- SGPA_Sem6
+- SGPA_Sem7
+- SGPA_Sem8
+- CGPA
+- AttendancePercent
+- Internships
+- Projects
+- Workshops
+- Certifications
+- Publications
+- AptitudeTestScore
+- SoftSkillsRating
+- CodingTestScore
+- MockInterviewScore
+- ExtraCurricular
+- CGPA_Tier
+- Salary Package
+- IsAnomaly
+- PlacementStatus
+
+Data types:
+StudentID             float64
+Gender                  int64
+City                    int64
+CollegeTier             int64
+Stream                  int64
+Specialisation          int64
+Hostel                  int64
+HistoryOfBacklogs       int64
+SGPA_Sem1             float64
+SGPA_Sem2             float64
+SGPA_Sem3             float64
+SGPA_Sem4             float64
+SGPA_Sem5             float64
+SGPA_Sem6             float64
+SGPA_Sem7             float64
+SGPA_Sem8             float64
+CGPA                  float64
+AttendancePercent     float64
+Internships           float64
+Projects              float64
+Workshops             float64
+Certifications        float64
+Publications          float64
+AptitudeTestScore     float64
+SoftSkillsRating      float64
+CodingTestScore       float64
+MockInterviewScore    float64
+ExtraCurricular       float64
+CGPA_Tier               int64
+Salary Package        float64
+IsAnomaly             float64
+PlacementStatus       float64
+dtype: object
+
+Missing values:
+StudentID                0
+Gender                   0
+City                     0
+CollegeTier              0
+Stream                   0
+Specialisation           0
+Hostel                   0
+HistoryOfBacklogs        0
+SGPA_Sem1                0
+SGPA_Sem2                0
+SGPA_Sem3                0
+SGPA_Sem4                0
+SGPA_Sem5                0
+SGPA_Sem6                0
+SGPA_Sem7                0
+SGPA_Sem8                0
+CGPA                     0
+AttendancePercent        0
+Internships              0
+Projects                 0
+Workshops             4488
+Certifications           0
+Publications             0
+AptitudeTestScore     4029
+SoftSkillsRating      3526
+CodingTestScore       2976
+MockInterviewScore    4957
+ExtraCurricular          0
+CGPA_Tier                0
+Salary Package           0
+IsAnomaly                0
+PlacementStatus          0
+dtype: int64
+
+Class distribution:
+CGPA_Tier
+1    16733
+0    16681
+2    16586
+Name: count, dtype: int64
