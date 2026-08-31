@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df = pd.read_csv('/Users/khvsaieswar/Desktop/Placement_prediction_recovered/dataset/placement_predict_50K_Raw.csv')
+df = pd.read_csv('/Users/khvsaieswar/Desktop/Placement_prediction/dataset/placement_predict_50K_Raw.csv')
 
 print("--- First 5 Rows ---")
 print(df.head())
