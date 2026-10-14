@@ -1,53 +1,89 @@
 {% extends "base.html" %}
 
-
-{% block title %}Reports{% endblock %}
-
+{% block title %}Technical Reports & Module Synthesis — PlacementPredict{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="tag tag-primary" style="margin-bottom: 8px;">Technical Synthesis</span>
+    <h1>PlacementPredict Technical Report</h1>
+    <p>
+      Executive summary of empirical findings, curriculum module takeaways (M1 &ndash; M6), and production deployment guidelines.
+    </p>
+  </div>
 
+  <div class="grid-cards" style="margin-bottom: 36px;">
+    <div class="card">
+      <span class="tag tag-success" style="margin-bottom: 8px;">Recommended Champion Model</span>
+      <h3 style="font-size: 1.3rem; font-weight: 800; color: #059669; margin-bottom: 6px;">Gradient Boosting Classifier</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        Achieved the highest overall test accuracy (<strong>91.97%</strong>) and an exceptional ROC-AUC of <strong>0.9786</strong> on 10,000 holdout records, with balanced precision (92.56%) and recall (95.45%).
+      </p>
+    </div>
 
-<div class="page">
+    <div class="card">
+      <span class="tag tag-accent" style="margin-bottom: 8px;">Fastest Linear Baseline</span>
+      <h3 style="font-size: 1.3rem; font-weight: 800; color: #0284c7; margin-bottom: 6px;">Ridge Logistic Regression</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        Achieved <strong>90.41%</strong> accuracy with <strong>&lt;0.5 ms</strong> inference latency. Highly interpretable linear coefficients making it optimal for SLA-sensitive regulatory audits.
+      </p>
+    </div>
+  </div>
 
+  <!-- Module-by-Module Technical Synthesis -->
+  <div class="card" style="margin-bottom: 30px;">
+    <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 16px;">Curriculum Takeaways Matrix (M1 &ndash; M6)</h3>
 
-   <h1>Placement Reports</h1>
-
-
-   <div class="cards">
-
-
-       <div class="card">
-           <h3>Student Report</h3>
-           <p>View student placement information.</p>
-           <button>Generate Report</button>
-       </div>
-
-
-       <div class="card">
-           <h3>Prediction Report</h3>
-           <p>View placement prediction results.</p>
-           <button>Generate Report</button>
-       </div>
-
-
-       <div class="card">
-           <h3>Model Report</h3>
-           <p>View machine learning model performance.</p>
-           <button>Generate Report</button>
-       </div>
-
-
-       <div class="card">
-           <h3>Dataset Report</h3>
-           <p>View dataset and preprocessing information.</p>
-           <button>Generate Report</button>
-       </div>
-
-
-   </div>
-
-
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Core Concept Explored</th>
+            <th>Empirical Finding in Placement Dataset</th>
+            <th>Production Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>M1</strong></td>
+            <td>The ML System Lifecycle</td>
+            <td>50,000 student records cleaned with strict training-serving split.</td>
+            <td>Eliminates silent data-leakage bugs and ensures 100% reproducible preprocessing.</td>
+          </tr>
+          <tr>
+            <td><strong>M2</strong></td>
+            <td>Linear Models & Regularization</td>
+            <td>L1 (Lasso) induced sparsity on secondary activities; L2 (Ridge) shrank correlated semester SGPAs.</td>
+            <td>Logistic regression forms a fast, solid baseline for campus eligibility screening.</td>
+          </tr>
+          <tr>
+            <td><strong>M3</strong></td>
+            <td>Tree-Based Ensembles</td>
+            <td>Gradient Boosting & XGBoost captured non-linear interactions between CGPA and coding scores.</td>
+            <td>Tree ensembles outperform linear baselines by +1.56% on structured student data.</td>
+          </tr>
+          <tr>
+            <td><strong>M4</strong></td>
+            <td>Unsupervised Learning</td>
+            <td>K-Means identified 3 clusters (Elite, Core Average, At-Risk); PCA compressed 32 dims to 19 (95% variance).</td>
+            <td>Provides unsupervised student segmentation and early warning alerts.</td>
+          </tr>
+          <tr>
+            <td><strong>M5</strong></td>
+            <td>Evaluation & Calibration</td>
+            <td>Stratified 5-fold CV confirmed low variance; PR curves proved high precision on imbalanced splits.</td>
+            <td>Calibrated probabilities allow colleges to trust predicted odds for career counseling.</td>
+          </tr>
+          <tr>
+            <td><strong>M6</strong></td>
+            <td>Production Engineering</td>
+            <td>Pipeline packaged into self-contained <code>.pkl</code> artifacts served via REST endpoint.</td>
+            <td>Ensures consistent transformation with zero training-serving skew under sub-5ms SLAs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

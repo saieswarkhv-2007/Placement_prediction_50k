@@ -1,52 +1,50 @@
 {% extends "base.html" %}
 
-
-{% block title %}Contact{% endblock %}
-
+{% block title %}Contact — Placement Prediction System{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="tag tag-accent" style="margin-bottom: 8px;">Support & Feedback</span>
+    <h1>Contact & Inquiries</h1>
+    <p>Have questions about the models, methodology, or integration into college ERP systems? Reach out below.</p>
+  </div>
 
+  <div class="prediction-layout">
+    <div class="card">
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 16px;">Send Message</h3>
+      <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you! Your inquiry has been received.');" style="margin: 0;">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" class="form-control" placeholder="e.g. Alex Sharma" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" placeholder="e.g. alex@university.edu" required>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" class="form-control" placeholder="Model inquiry / Dataset question" required>
+        </div>
+        <div class="form-group">
+          <label>Message Content</label>
+          <textarea class="form-control" rows="4" placeholder="Enter your detailed query..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Submit Inquiry &rarr;
+        </button>
+      </form>
+    </div>
 
-<div class="page">
-
-
-   <h1>Contact Us</h1>
-
-
-   <h2>Placement Prediction System</h2>
-
-
-   <p>
-       For questions, feedback or technical support,
-       contact the project team.
-   </p>
-
-
-   <form>
-
-
-       <label>Name</label>
-       <input type="text" placeholder="Enter your name">
-
-
-       <label>Email</label>
-       <input type="email" placeholder="Enter your email">
-
-
-       <label>Message</label>
-       <textarea rows="6"
-                 placeholder="Enter your message"></textarea>
-
-
-       <button type="button">
-           Submit
-       </button>
-
-
-   </form>
-
-
+    <div class="card">
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 16px;">System Information</h3>
+      <div style="line-height: 2; font-size: 0.95rem; color: var(--text-main);">
+        <div>📍 <strong>Deployment Environment:</strong> Local Dev & Production Serving</div>
+        <div>⚡ <strong>API Endpoint:</strong> <code>/api/predict</code> (JSON REST)</div>
+        <div>📦 <strong>Registry Path:</strong> <code>models/*.pkl</code></div>
+        <div>📊 <strong>Benchmark Cohort:</strong> 50,000 University Student Instances</div>
+      </div>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

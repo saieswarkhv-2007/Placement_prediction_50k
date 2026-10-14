@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}{{ model.name }} — Complete Outputs & Metrics{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Breadcrumb & Navigation -->
+  <div style="margin-bottom: 20px;">
+    <a href="{{ url_for('models') }}" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+      &larr; Back to All Models Leaderboard
+    </a>
+  </div>
+
+  <!-- Header Card -->
+  <div class="card" style="margin-bottom: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <span class="tag tag-primary">{{ model.module }}</span>
+          <span class="tag tag-accent">{{ model.type }}</span>
+        </div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">
+          {{ model.name }}
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 850px;">
+          {{ model.description }}
+        </p>
+      </div>
+      <div>
+        <a href="{{ url_for('prediction') }}?model={{ model.id }}" class="btn btn-primary">
+          ⚡ Predict with this Model &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Mathematical Formula Box -->
+    {% if model.formula %}
+    <div style="background: var(--bg-alt); border-radius: var(--radius-md); padding: 14px 18px; margin-top: 18px; border-left: 3px solid var(--primary);">
+      <div style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+        Mathematical Objective / Formulation
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--primary); font-weight: 600;">
+        {{ model.formula }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Metrics KPI Row -->
+  <div class="grid-cards" style="margin-bottom: 30px;">
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Accuracy</div>
+        <div class="kpi-val" style="color: #059669;">{{ (model.accuracy * 100)|round(2) }}%</div>
+        <div class="kpi-sub">Overall Test Correctness</div>
+      </div>
+      <div class="kpi-icon" style="background: #d1fae5; color: #059669;">🎯</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">F1-Score</div>
+        <div class="kpi-val" style="color: var(--primary);">{{ (model.f1_score * 100)|round(2) }}%</div>
+        <div class="kpi-sub">Harmonic Mean (Prec & Rec)</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">⚖️</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">ROC-AUC</div>
+        <div class="kpi-val" style="color: #0284c7;">{{ model.roc_auc|round(4) }}</div>
+        <div class="kpi-sub">Separation Discrimination</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;">📈</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Precision / Recall</div>
+        <div class="kpi-val" style="font-size: 1.4rem;">
+          {{ (model.precision * 100)|round(1) }}% / {{ (model.recall * 100)|round(1) }}%
+        </div>
+        <div class="kpi-sub">Placed Class Metrics</div>
+      </div>
+      <div class="kpi-icon" style="background: #fef3c7; color: #d97706;">🔍</div>
+    </div>
+  </div>
+
+  <!-- Model Visual Outputs Grid -->
+  <div class="visual-grid">
+    <!-- Confusion Matrix -->
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Confusion Matrix Output</h3>
+        <p>Actual vs Predicted placements on 10,000 test cases</p>
+      </div>
+      <div class="visual-card-body">
+        {% if model.cm_plot %}
+          <img src="{{ url_for('static', filename='generated_plots/' + model.cm_plot) }}" alt="Confusion Matrix">
+        {% else %}
+          <p>Confusion matrix plot not available.</p>
+        {% endif %}
+      </div>
+      <div class="visual-card-footer">
+        <strong>Breakdown:</strong> 
+        True Negatives (TN): {{ "{:,}".format(model.confusion_matrix.tn) }} &bull; 
+        False Positives (FP): {{ "{:,}".format(model.confusion_matrix.fp) }} &bull; 
+        False Negatives (FN): {{ "{:,}".format(model.confusion_matrix.fn) }} &bull; 
+        True Positives (TP): {{ "{:,}".format(model.confusion_matrix.tp) }}
+      </div>
+    </div>
+
+    <!-- ROC Curve -->
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Receiver Operating Characteristic (ROC)</h3>
+        <p>True Positive Rate vs False Positive Rate across all thresholds</p>
+      </div>
+      <div class="visual-card-body">
+        {% if model.roc_plot %}
+          <img src="{{ url_for('static', filename='generated_plots/' + model.roc_plot) }}" alt="ROC Curve">
+        {% else %}
+          <p>ROC curve plot not available.</p>
+        {% endif %}
+      </div>
+      <div class="visual-card-footer">
+        Area Under Curve (AUC) = <strong>{{ model.roc_auc|round(4) }}</strong>. Proves high ranking fidelity across decision cutoffs.
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Features Bar Plot -->
+  {% if model.feat_plot %}
+  <div class="visual-card" style="margin-bottom: 30px;">
+    <div class="visual-card-header">
+      <h3>Feature Importances / Coefficient Weights</h3>
+      <p>Top attributes influencing {{ model.short_name }} placement classification decisions</p>
+    </div>
+    <div class="visual-card-body">
+      <img src="{{ url_for('static', filename='generated_plots/' + model.feat_plot) }}" alt="Feature Importance">
+    </div>
+    <div class="visual-card-footer">
+      Notice how <code>CGPA</code>, <code>CodingTestScore</code>, <code>Internships</code>, and <code>HistoryOfBacklogs</code> form the decisive criteria.
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Hyperparameters & Pipeline Details -->
+  <div class="prediction-layout" style="margin-bottom: 30px;">
+    <div class="card">
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px;">Tuned Hyperparameters</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter Name</th>
+              <th>Configured Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for param_name, param_val in model.hyperparams.items() %}
+            <tr>
+              <td><code>{{ param_name }}</code></td>
+              <td><strong>{{ param_val }}</strong></td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td><code>train_time</code></td>
+              <td>{{ model.train_time_sec }} seconds</td>
+            </tr>
+            <tr>
+              <td><code>inference_latency</code></td>
+              <td>{{ model.inference_latency_ms }} ms / sample</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px;">Production Deployment Code</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+        To execute inference against this packaged artifact in Python or FastAPI:
+      </p>
+
+      <div class="code-block" style="font-size: 0.8rem;">
+import pickle
+import pandas as pd
+
+# Load serialized pipeline artifact
+with open("models/{{ model.id }}.pkl", "rb") as f:
+    pipeline = pickle.load(f)
+
+# Incoming student feature payload
+payload = pd.DataFrame([{
+    'Gender': 'Male', 'CollegeTier': 'Tier1', 'Stream': 'CS',
+    'Specialisation': 'DataScience', 'Hostel': 'No',
+    'HistoryOfBacklogs': 0, 'CGPA': 8.65, 'AttendancePercent': 92.0,
+    'Internships': 2, 'Projects': 3, 'Workshops': 2,
+    'Certifications': 2, 'Publications': 1,
+    'AptitudeTestScore': 85.0, 'SoftSkillsRating': 8.0,
+    'CodingTestScore': 90.0, 'MockInterviewScore': 82.0,
+    'ExtraCurricular': 1
+}])
+
+# Execute prediction & probability estimation
+prediction = pipeline.predict(payload)[0]       # 1 = Placed
+probability = pipeline.predict_proba(payload)[0][1] # e.g. 0.942
+print(f"Placed: {prediction}, Probability: {probability:.3f}")
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

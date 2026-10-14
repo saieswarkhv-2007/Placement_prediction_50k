@@ -1,179 +1,230 @@
 {% extends "base.html" %}
 
-
-{% block title %}
-Home - Placement Prediction System
-{% endblock %}
-
+{% block title %}PlacementPredict — University Placement Prediction System{% endblock %}
 
 {% block content %}
-
-
 <section class="hero">
-
-
-   <h1>Placement Prediction System</h1>
-
-
-   <h2>
-       Predict Student Placement Opportunities Using Machine Learning
-   </h2>
-
-
-   <p>
-       Analyze academic performance, technical skills, internships,
-       projects, aptitude and communication skills to predict
-       student placement outcomes.
-   </p>
-
-
-   <div class="buttons">
-
-
-       <a href="{{ url_for('prediction') }}" class="btn">
-           Start Prediction
-       </a>
-
-
-       <a href="{{ url_for('dashboard') }}" class="btn secondary">
-           View Dashboard
-       </a>
-
-
-   </div>
-
-
+  <div class="hero-content">
+    <div class="hero-badge">🎓 End-to-End ML System (Modules M1 &ndash; M6)</div>
+    <h1>Predict Student Placement Outcomes with <span>Machine Learning</span></h1>
+    <p>
+      An enterprise-grade predictive service trained on 50,000 student records. Featuring regularized linear models, 
+      ensemble trees, unsupervised clustering, calibration analysis, and production ML serving.
+    </p>
+    <div class="hero-actions">
+      <a href="{{ url_for('prediction') }}" class="btn btn-primary" style="padding: 14px 28px; font-size: 1.05rem;">
+        ⚡ Predict Student Placement
+      </a>
+      <a href="{{ url_for('models') }}" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">
+        📊 View ML Models & Accuracy
+      </a>
+      <a href="{{ url_for('visualization') }}" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">
+        📈 Module Visualizations (M1-M6)
+      </a>
+    </div>
+  </div>
 </section>
 
-
-
-
-<section class="section">
-
-
-   <h2>About the System</h2>
-
-
-   <p>
-       The Placement Prediction System is a machine-learning-based
-       web application designed to analyze student information and
-       predict placement outcomes.
-   </p>
-
-
-   <p>
-       The system helps students understand their placement
-       opportunities and helps placement officers analyze
-       student performance.
-   </p>
-
-
-</section>
-
-
-
-
-<section class="section">
-
-
-   <h2>Key Features</h2>
-
-
-   <div class="cards">
-
-
-       <div class="card">
-           <h3>📂 Dataset</h3>
-           <p>Upload and analyze placement datasets.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>🔧 Preprocessing</h3>
-           <p>Clean missing values, encode data and scale features.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>📊 Visualization</h3>
-           <p>Analyze placement data using graphs and charts.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>🤖 ML Models</h3>
-           <p>Train and compare machine learning algorithms.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>🎯 Prediction</h3>
-           <p>Predict an individual student's placement.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>📋 Reports</h3>
-           <p>View and download placement prediction results.</p>
-       </div>
-
-
-   </div>
-
-
-</section>
-
-
-
-
-<section class="section workflow">
-
-
-   <h2>How the System Works</h2>
-
-
-   <div class="flow">
-
-
-       <span>Student Data</span>
-       <b>→</b>
-
-
-       <span>Preprocessing</span>
-       <b>→</b>
-
-
-       <span>ML Model</span>
-       <b>→</b>
-
-
-       <span>Prediction</span>
-       <b>→</b>
-
-
-       <span>Report</span>
-
-
-   </div>
-
-
-</section>
-
-
-
-
-<section class="cta">
-
-
-   <h2>Ready to Predict Placement?</h2>
-
-
-   <a href="{{ url_for('prediction') }}" class="btn">
-       Predict Placement
-   </a>
-
-
-</section>
-
-
+<div class="container">
+  <!-- System Metrics Overview -->
+  <div class="grid-cards" style="margin-bottom: 40px;">
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Benchmark Dataset</div>
+        <div class="kpi-val">50,000</div>
+        <div class="kpi-sub">32 Attributes &bull; 65.7% Placed Base</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">📚</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Top Model Accuracy</div>
+        <div class="kpi-val" style="color: #059669;">91.97%</div>
+        <div class="kpi-sub">Gradient Boosting &bull; 0.9786 AUC</div>
+      </div>
+      <div class="kpi-icon" style="background: #d1fae5; color: #059669;">🎯</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Trained ML Models</div>
+        <div class="kpi-val">6 Models</div>
+        <div class="kpi-sub">Linear, Trees, Boosting & Ensembles</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;">🤖</div>
+    </div>
+
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Serving Latency</div>
+        <div class="kpi-val">< 5 ms</div>
+        <div class="kpi-sub">High-Throughput Production Pipeline</div>
+      </div>
+      <div class="kpi-icon" style="background: #fef3c7; color: #d97706;">⚡</div>
+    </div>
+  </div>
+
+  <!-- ML Lifecycle Workflow -->
+  <div class="card" style="margin-bottom: 40px; text-align: center;">
+    <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px;">M1. Complete ML System Lifecycle</h3>
+    <p style="color: var(--text-muted); margin-bottom: 24px; max-width: 800px; margin-left: auto; margin-right: auto;">
+      From raw student records to real-time served predictions and production drift monitoring.
+    </p>
+
+    <div class="lifecycle-diagram">
+      <div class="lifecycle-step">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">Raw Data Ingestion</div>
+      </div>
+      <div class="lifecycle-arrow">&rarr;</div>
+      <div class="lifecycle-step">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">Data Cleaning & Imputation</div>
+      </div>
+      <div class="lifecycle-arrow">&rarr;</div>
+      <div class="lifecycle-step">
+        <div class="step-num">Step 3</div>
+        <div class="step-title">Feature Pipelines (OHE & Scaling)</div>
+      </div>
+      <div class="lifecycle-arrow">&rarr;</div>
+      <div class="lifecycle-step">
+        <div class="step-num">Step 4</div>
+        <div class="step-title">Model Training (M2/M3)</div>
+      </div>
+      <div class="lifecycle-arrow">&rarr;</div>
+      <div class="lifecycle-step">
+        <div class="step-num">Step 5</div>
+        <div class="step-title">Evaluation & Calibration</div>
+      </div>
+      <div class="lifecycle-arrow">&rarr;</div>
+      <div class="lifecycle-step">
+        <div class="step-num">Step 6</div>
+        <div class="step-title">FastAPI/Flask Serving & Monitoring</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Curriculum Modules Architecture M1 - M6 -->
+  <div class="page-header" style="margin-bottom: 20px;">
+    <h2>Academic Modules Architecture (M1 &ndash; M6)</h2>
+    <p>Comprehensive coverage of curriculum components implemented within this application.</p>
+  </div>
+
+  <div class="grid-cards" style="margin-bottom: 50px;">
+    <div class="card">
+      <span class="tag tag-primary" style="margin-bottom: 12px;">Module 1</span>
+      <h3 class="card-title">PlacementPredict as a System</h3>
+      <p class="card-desc">
+        The ML system lifecycle, supervised vs unsupervised taxonomy, end-to-end inference tracing, and training-serving skew prevention.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m1" class="btn btn-secondary btn-sm">Explore M1 Visuals &rarr;</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-accent" style="margin-bottom: 12px;">Module 2</span>
+      <h3 class="card-title">Linear Models at Depth</h3>
+      <p class="card-desc">
+        Logistic regression with sigmoid activation, cross-entropy loss, L1/L2 regularization (Ridge, Lasso, Elastic Net), and feature scaling standardisation.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m2" class="btn btn-secondary btn-sm">Explore M2 Visuals &rarr;</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-success" style="margin-bottom: 12px;">Module 3</span>
+      <h3 class="card-title">Tree-Based Ensembles</h3>
+      <p class="card-desc">
+        Greedy decision trees with Gini Impurity, cost-complexity pruning, Random Forests bagging, AdaBoost, Gradient Boosting, and XGBoost.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m3" class="btn btn-secondary btn-sm">Explore M3 Visuals &rarr;</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-warning" style="margin-bottom: 12px;">Module 4</span>
+      <h3 class="card-title">Unsupervised Learning</h3>
+      <p class="card-desc">
+        K-Means & K-Means++ with Elbow and Silhouette optimization, PCA dimensionality reduction, and Isolation Forest anomaly detection.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m4" class="btn btn-secondary btn-sm">Explore M4 Visuals &rarr;</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-primary" style="margin-bottom: 12px;">Module 5</span>
+      <h3 class="card-title">Evaluation & Calibration</h3>
+      <p class="card-desc">
+        Stratified holdout splits, confusion matrices, multi-model ROC & PR curves, probability calibration (reliability diagrams), and cross-validation.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m5" class="btn btn-secondary btn-sm">Explore M5 Visuals &rarr;</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-accent" style="margin-bottom: 12px;">Module 6</span>
+      <h3 class="card-title">Production ML Engineering</h3>
+      <p class="card-desc">
+        Notebook-to-production rituals, model packaging (.pkl & ONNX), inference latency benchmarks, and concept/data drift monitoring.
+      </p>
+      <div style="margin-top: 16px;">
+        <a href="{{ url_for('visualization') }}#tab-m6" class="btn btn-secondary btn-sm">Explore M6 Visuals &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Model Leaderboard Preview -->
+  <div class="card" style="margin-bottom: 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 800;">Trained Models Leaderboard</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Evaluation results on 10,000 held-out stratified student test records.</p>
+      </div>
+      <a href="{{ url_for('models') }}" class="btn btn-primary btn-sm">View All Models & Full Outputs &rarr;</a>
+    </div>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Model Name</th>
+            <th>Algorithm Type</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1 Score</th>
+            <th>ROC-AUC</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m_id, m in models_summary.items() %}
+          <tr>
+            <td>
+              <strong>{{ m.name }}</strong>
+            </td>
+            <td><span class="tag tag-primary">{{ m.type }}</span></td>
+            <td><strong>{{ (m.accuracy * 100)|round(2) }}%</strong></td>
+            <td>{{ (m.precision * 100)|round(2) }}%</td>
+            <td>{{ (m.recall * 100)|round(2) }}%</td>
+            <td><strong style="color: var(--primary);">{{ (m.f1_score * 100)|round(2) }}%</strong></td>
+            <td><span class="tag tag-success">{{ m.roc_auc|round(3) }}</span></td>
+            <td>
+              <a href="{{ url_for('model_detail', model_id=m_id) }}" class="btn btn-secondary btn-sm">
+                Open Model & Outputs &rarr;
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}

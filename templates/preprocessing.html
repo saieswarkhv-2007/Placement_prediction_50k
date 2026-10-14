@@ -1,73 +1,120 @@
 {% extends "base.html" %}
 
-
-{% block title %}Preprocessing{% endblock %}
-
+{% block title %}Data Preprocessing Pipeline — Module M2{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="tag tag-accent" style="margin-bottom: 8px;">Module 2 Engineering</span>
+    <h1>Data Preprocessing & Feature Engineering</h1>
+    <p>
+      The systematic transformation pipeline from raw student records into model-ready numerical feature tensors.
+      Adhering to strict training-serving boundary discipline to eliminate leakage and skew.
+    </p>
+  </div>
 
+  <!-- Pipeline Stages Cards -->
+  <div class="grid-cards" style="margin-bottom: 36px;">
+    <div class="card">
+      <div style="font-size: 1.8rem; margin-bottom: 8px;">1️⃣</div>
+      <h3 class="card-title">Missing Value Imputation</h3>
+      <p class="card-desc">
+        Numerical attributes (<code>Workshops</code>, <code>AptitudeTestScore</code>, <code>CodingTestScore</code>) 
+        imputed via <strong>Median</strong> to preserve robustness against outliers. Categorical fields imputed with <strong>Mode</strong>.
+      </p>
+    </div>
 
-<div class="page">
+    <div class="card">
+      <div style="font-size: 1.8rem; margin-bottom: 8px;">2️⃣</div>
+      <h3 class="card-title">Categorical Encoding</h3>
+      <p class="card-desc">
+        Nominal attributes (<code>Gender</code>, <code>Stream</code>, <code>Specialisation</code>, <code>Hostel</code>) 
+        transformed via <strong>One-Hot Encoding</strong> (<code>handle_unknown='ignore'</code>) to prevent spurious ordinal biases.
+      </p>
+    </div>
 
+    <div class="card">
+      <div style="font-size: 1.8rem; margin-bottom: 8px;">3️⃣</div>
+      <h3 class="card-title">Feature Standardization</h3>
+      <p class="card-desc">
+        Numerical columns scaled using <strong>StandardScaler</strong> ($z = \frac{x - \mu}{\sigma}$). Critical for 
+        gradient descent convergence in linear models, while tree models remain invariant.
+      </p>
+    </div>
 
-   <h1>Data Preprocessing</h1>
+    <div class="card">
+      <div style="font-size: 1.8rem; margin-bottom: 8px;">4️⃣</div>
+      <h3 class="card-title">Target Leakage Prevention</h3>
+      <p class="card-desc">
+        Strict exclusion of <code>Salary Package</code> (which only exists post-placement) and arbitrary identifiers 
+        (<code>StudentID</code>) to guarantee production validity.
+      </p>
+    </div>
+  </div>
 
+  <!-- Visual Comparisons -->
+  <div class="visual-grid">
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Feature Correlation Matrix Heatmap</h3>
+        <p>Bivariate Pearson correlation across academic metrics and placement outcome</p>
+      </div>
+      <div class="visual-card-body">
+        <img src="{{ url_for('static', filename='generated_plots/m1_correlation_heatmap.png') }}" alt="Correlation Heatmap">
+      </div>
+      <div class="visual-card-footer">
+        Key insight: <code>CGPA</code> ($r \approx 0.68$) and <code>CodingTestScore</code> ($r \approx 0.61$) show the strongest positive linear association with <code>PlacementStatus</code>.
+      </div>
+    </div>
 
-   <div class="cards">
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Missing Values Heatmap & Sparsity Pattern</h3>
+        <p>Distribution of null entries prior to pipeline imputation</p>
+      </div>
+      <div class="visual-card-body">
+        <img src="{{ url_for('static', filename='generated_plots/m1_missing_values.png') }}" alt="Missing Values Heatmap">
+      </div>
+      <div class="visual-card-footer">
+        Observation: Missingness concentrated in optional technical assessments (Workshops ~8.9%, MockInterview ~9.9%), successfully imputed without loss of sample size.
+      </div>
+    </div>
+  </div>
 
+  <!-- Code Implementation Walkthrough -->
+  <div class="card">
+    <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 12px;">Scikit-Learn Production Preprocessing Pipeline</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+      This pipeline encapsulates both imputation and scaling inside a persistent <code>ColumnTransformer</code>, ensuring identical transformation during batch training and online single-student inference.
+    </p>
 
-       <div class="card">
-           <h3>Missing Values</h3>
-           <p>
-               Deletion, mean imputation, median imputation,
-               model-based imputation and MissingIndicator.
-           </p>
-       </div>
+    <div class="code-block">
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
+# Define numeric and categorical feature sets
+numeric_features = ['CGPA', 'HistoryOfBacklogs', 'Internships', 'CodingTestScore', 'AptitudeTestScore', ...]
+categorical_features = ['Gender', 'CollegeTier', 'Stream', 'Specialisation', 'Hostel', ...]
 
-       <div class="card">
-           <h3>Data Cleaning</h3>
-           <p>
-               Identify and remove duplicate and inconsistent records.
-           </p>
-       </div>
+# Build modular transformers
+num_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
 
+cat_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('ohe', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+])
 
-       <div class="card">
-           <h3>Encoding</h3>
-           <p>
-               One-hot, ordinal, target and embedding-based encoding.
-           </p>
-       </div>
-
-
-       <div class="card">
-           <h3>Feature Scaling</h3>
-           <p>
-               Standardization and normalization of numerical features.
-           </p>
-       </div>
-
-
-   </div>
-
-
-   <div class="workflow">
-
-
-       <h2>Preprocessing Workflow</h2>
-
-
-       <p>
-           Raw Dataset → Cleaning → Missing Values →
-           Encoding → Scaling → Processed Dataset
-       </p>
-
-
-   </div>
-
-
+# Assemble unified ColumnTransformer
+preprocessor = ColumnTransformer(transformers=[
+    ('num', num_transformer, numeric_features),
+    ('cat', cat_transformer, categorical_features)
+])
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

@@ -1,57 +1,202 @@
 {% extends "base.html" %}
 
-
-{% block title %}Dataset{% endblock %}
-
+{% block title %}Placement Dataset Management & Profiling{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h1>Dataset Management & Profiling</h1>
+      <p>Inspect academic features, validate data quality, check class balance, and upload custom datasets.</p>
+    </div>
+    <div>
+      {% if profile.is_custom_upload %}
+      <form action="{{ url_for('dataset') }}" method="POST" style="margin: 0; display: inline;">
+        <input type="hidden" name="action" value="reset">
+        <button type="submit" class="btn btn-secondary btn-sm">↺ Reset to Benchmark 50K Dataset</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
 
+  <!-- Active Dataset Banner -->
+  <div style="background: #ffffff; border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <span style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Active Ingestion Source</span>
+      <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-top: 2px;">
+        📁 {{ profile.filename }}
+        {% if profile.is_custom_upload %}
+          <span class="tag tag-accent" style="margin-left: 8px;">User Uploaded</span>
+        {% else %}
+          <span class="tag tag-success" style="margin-left: 8px;">Default 50K Benchmark</span>
+        {% endif %}
+      </div>
+    </div>
+    <div style="font-size: 0.9rem; color: var(--text-muted);">
+      Target Attribute: <strong style="color: var(--primary);">PlacementStatus</strong> (1 = Placed, 0 = Not Placed)
+    </div>
+  </div>
 
-<div class="page">
+  <!-- KPI Cards -->
+  <div class="grid-cards" style="margin-bottom: 30px;">
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Total Student Records</div>
+        <div class="kpi-val">{{ "{:,}".format(profile.total_rows) }}</div>
+        <div class="kpi-sub">Samples for Training & Evaluation</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">👥</div>
+    </div>
 
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Total Feature Attributes</div>
+        <div class="kpi-val">{{ profile.total_cols }}</div>
+        <div class="kpi-sub">Academic, Technical & Demographic</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;">📊</div>
+    </div>
 
-   <h1>Placement Dataset</h1>
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Missing Cell Count</div>
+        <div class="kpi-val" style="color: {% if profile.missing_total > 0 %}#d97706{% else %}#059669{% endif %};">
+          {{ "{:,}".format(profile.missing_total) }}
+        </div>
+        <div class="kpi-sub">Resolved via SimpleImputer</div>
+      </div>
+      <div class="kpi-icon" style="background: #fef3c7; color: #d97706;">⚠️</div>
+    </div>
 
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Placement Base Rate</div>
+        <div class="kpi-val" style="color: #059669;">
+          {% if profile.target_dist %}{{ profile.target_dist.placement_percentage }}%{% else %}N/A{% endif %}
+        </div>
+        <div class="kpi-sub">
+          {% if profile.target_dist %}
+            {{ "{:,}".format(profile.target_dist.placed) }} Placed / {{ "{:,}".format(profile.target_dist.not_placed) }} Not
+          {% else %}
+            No target column
+          {% endif %}
+        </div>
+      </div>
+      <div class="kpi-icon" style="background: #d1fae5; color: #059669;">🎓</div>
+    </div>
+  </div>
 
-   <div class="cards">
+  <!-- Upload Dataset Card -->
+  <div class="card" style="margin-bottom: 36px; border: 2px dashed #cbd5e1; background: #ffffff;">
+    <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">📤 Upload New Dataset (CSV)</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+      Upload your own university placement CSV file to profile data, analyze missing fields, and test models.
+    </p>
 
+    <form action="{{ url_for('dataset') }}" method="POST" enctype="multipart/form-data" style="margin: 0;">
+      <input type="hidden" name="action" value="upload">
+      <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+        <input type="file" name="dataset_file" accept=".csv" required 
+               style="padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-md); flex: 1; min-width: 260px;">
+        <button type="submit" class="btn btn-primary">
+          Upload & Inspect Dataset 🚀
+        </button>
+      </div>
+      <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+        Supported format: <code>.csv</code> with standard headers (e.g. CGPA, Stream, PlacementStatus).
+      </div>
+    </form>
+  </div>
 
-       <div class="card">
-           <h3>Total Students</h3>
-           <p>Dataset records will appear here.</p>
-       </div>
+  <!-- Data Preview Table -->
+  <div class="card" style="margin-bottom: 36px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3 style="font-size: 1.2rem; font-weight: 800;">Dataset Preview (First 15 Records)</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Tabular snapshot of raw student instances before pipeline transformation.</p>
+      </div>
+      <span class="tag tag-primary">15 Sample Rows</span>
+    </div>
 
+    <div class="table-responsive" style="max-height: 480px;">
+      <table>
+        <thead>
+          <tr>
+            {% for col in profile.columns %}
+              <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in profile.preview_data %}
+            <tr>
+              {% for col in profile.columns %}
+                <td style="white-space: nowrap;">{{ row[col] }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-       <div class="card">
-           <h3>Total Features</h3>
-           <p>Number of columns will appear here.</p>
-       </div>
+  <!-- Column Statistics & Quality Summary Table -->
+  <div class="card">
+    <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px;">Column Metadata & Profiling</h3>
+    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+      Comprehensive breakdown of feature data types, missingness percentages, distinct cardinaties, and range summaries.
+    </p>
 
-
-       <div class="card">
-           <h3>Missing Values</h3>
-           <p>Missing-value count will appear here.</p>
-       </div>
-
-
-       <div class="card">
-           <h3>Duplicate Records</h3>
-           <p>Duplicate count will appear here.</p>
-       </div>
-
-
-   </div>
-
-
-   <h2>Dataset Operations</h2>
-
-
-   <button>Upload Dataset</button>
-   <button>View Dataset</button>
-   <button>Dataset Summary</button>
-
-
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Column Name</th>
+            <th>Data Type</th>
+            <th>Null Count</th>
+            <th>Null %</th>
+            <th>Distinct Values</th>
+            <th>Summary / Top Values</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for col in profile.column_summaries %}
+          <tr>
+            <td><strong>{{ col.name }}</strong></td>
+            <td><code>{{ col.dtype }}</code></td>
+            <td>
+              {% if col.null_count > 0 %}
+                <span style="color: var(--danger); font-weight: 600;">{{ "{:,}".format(col.null_count) }}</span>
+              {% else %}
+                <span style="color: var(--success);">0</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if col.null_pct > 0 %}
+                <span class="tag tag-warning">{{ col.null_pct }}%</span>
+              {% else %}
+                <span class="tag tag-success">0.0%</span>
+              {% endif %}
+            </td>
+            <td>{{ col.unique_count }}</td>
+            <td>
+              {% if col.stats.mean is defined and col.stats.mean != '-' %}
+                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                  Min: <strong>{{ col.stats.min }}</strong> &bull; 
+                  Mean: <strong>{{ col.stats.mean }}</strong> &bull; 
+                  Max: <strong>{{ col.stats.max }}</strong>
+                </span>
+              {% elif col.stats.top_values is defined %}
+                <span style="font-size: 0.85rem; color: var(--text-muted);">{{ col.stats.top_values }}</span>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

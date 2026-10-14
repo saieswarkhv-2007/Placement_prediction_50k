@@ -1,63 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-   <title>{% block title %} University Placement Prediction System{% endblock %}</title>
-
-
-   <link rel="stylesheet"
-         href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}University Placement Prediction System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+  {% block extra_head %}{% endblock %}
 </head>
-
-
 <body>
 
-
 <header>
-   <div class="logo">
-       🎓 Placement Prediction System
-   </div>
+  <a href="{{ url_for('home') }}" class="logo">
+    🎓 <span>PlacementPredict</span>
+  </a>
 
-
-   <nav>
-       <a href="{{ url_for('home') }}">Home</a>
-       <a href="{{ url_for('about') }}">About</a>
-       <a href="{{ url_for('dataset') }}">Dataset</a>
-       <a href="{{ url_for('preprocessing') }}">Preprocessing</a>
-       <a href="{{ url_for('visualization') }}">Visualization</a>
-       <a href="{{ url_for('models') }}">ML Models</a>
-       <a href="{{ url_for('prediction') }}">Prediction</a>
-       <a href="{{ url_for('dashboard') }}">Dashboard</a>
-       <a href="{{ url_for('reports') }}">Reports</a>
-       <a href="{{ url_for('contact') }}">Contact</a>
-   </nav>
+  <nav>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+    <a href="{{ url_for('dataset') }}" class="{% if request.endpoint == 'dataset' %}active{% endif %}">Dataset</a>
+    <a href="{{ url_for('preprocessing') }}" class="{% if request.endpoint == 'preprocessing' %}active{% endif %}">Preprocessing</a>
+    <a href="{{ url_for('visualization') }}" class="{% if request.endpoint == 'visualization' %}active{% endif %}">Visualization (M1-M6)</a>
+    <a href="{{ url_for('models') }}" class="{% if request.endpoint in ['models', 'model_detail'] %}active{% endif %}">ML Models</a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="{{ url_for('reports') }}" class="{% if request.endpoint == 'reports' %}active{% endif %}">Reports</a>
+    <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About</a>
+    <a href="{{ url_for('prediction') }}" class="nav-btn {% if request.endpoint == 'prediction' %}active{% endif %}">Predict Student 🚀</a>
+  </nav>
 </header>
 
-
-
-
 <main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container" style="padding-bottom: 0;">
+        {% for category, message in messages %}
+          <div style="padding: 12px 18px; margin-bottom: 20px; border-radius: 8px; font-weight: 500; font-size: 0.9rem;
+                      background: {% if category == 'success' %}#d1fae5; color: #065f46; border: 1px solid #a7f3d0;
+                                  {% elif category == 'danger' or category == 'error' %}#fee2e2; color: #991b1b; border: 1px solid #fecaca;
+                                  {% else %}#e0f2fe; color: #075985; border: 1px solid #bae6fd;{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
-
-   {% block content %}
-
-
-   {% endblock %}
-
-
+  {% block content %}{% endblock %}
 </main>
 
-
-
-
 <footer>
-   <p>© 2026 Placement Prediction System</p>
-   <p>Python | Flask | Pandas | Machine Learning</p>
+  <p><strong>🎓 PlacementPredict ML System</strong> &bull; Complete ML Engineering Lifecycle (M1 &ndash; M6)</p>
+  <p>Production Serving with Flask &bull; Scikit-Learn &bull; XGBoost &bull; Pandas</p>
 </footer>
 
-
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>

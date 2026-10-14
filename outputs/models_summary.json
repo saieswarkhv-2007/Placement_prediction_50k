@@ -1,0 +1,444 @@
+{
+  "logistic_regression": {
+    "id": "logistic_regression",
+    "name": "Logistic Regression (Ridge / L2)",
+    "short_name": "Logistic Reg.",
+    "module": "M2",
+    "type": "Linear Classifier",
+    "description": "Regularized binary classification utilizing sigmoid activation and log-loss minimization over standardized feature hyperplane.",
+    "formula": "P(y=1|X) = \\sigma(w^T X + b) = \\frac{1}{1 + e^{-(w^T X + b)}}",
+    "hyperparams": {
+      "penalty": "l2",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 500
+    },
+    "train_time_sec": 0.033,
+    "inference_latency_ms": 0.0,
+    "accuracy": 0.9041,
+    "precision": 0.9119,
+    "recall": 0.9454,
+    "f1_score": 0.9283,
+    "roc_auc": 0.9662,
+    "log_loss": 0.2194,
+    "confusion_matrix": {
+      "tn": 2829,
+      "fp": 600,
+      "fn": 359,
+      "tp": 6212
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 2.3229
+      },
+      {
+        "feature": "HistoryOfBacklogs_No",
+        "importance": 1.2002
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 1.1653
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 1.1351
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": -0.8858
+      },
+      {
+        "feature": "HistoryOfBacklogs_Yes",
+        "importance": -0.6967
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.6278
+      },
+      {
+        "feature": "Certifications",
+        "importance": 0.5304
+      },
+      {
+        "feature": "CollegeTier_Tier1",
+        "importance": 0.4728
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.403
+      }
+    ],
+    "cm_plot": "logistic_regression_confusion_matrix.png",
+    "roc_plot": "logistic_regression_roc_curve.png",
+    "feat_plot": "logistic_regression_feature_importance.png"
+  },
+  "decision_tree": {
+    "id": "decision_tree",
+    "name": "Decision Tree Classifier",
+    "short_name": "Decision Tree",
+    "module": "M3",
+    "type": "Tree Model",
+    "description": "Greedy recursive axis-aligned partitioning optimizing Gini Impurity with cost-complexity and maximum depth pre-pruning.",
+    "formula": "I_G(p) = 1 - \\sum_{i=1}^C p_i^2",
+    "hyperparams": {
+      "criterion": "gini",
+      "max_depth": 8,
+      "min_samples_split": 10,
+      "min_samples_leaf": 5
+    },
+    "train_time_sec": 0.205,
+    "inference_latency_ms": 0.0,
+    "accuracy": 0.9091,
+    "precision": 0.9183,
+    "recall": 0.9458,
+    "f1_score": 0.9319,
+    "roc_auc": 0.9632,
+    "log_loss": 0.2422,
+    "confusion_matrix": {
+      "tn": 2876,
+      "fp": 553,
+      "fn": 356,
+      "tp": 6215
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 0.6211
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.1228
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": 0.0953
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.0461
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 0.0429
+      },
+      {
+        "feature": "HistoryOfBacklogs_Yes",
+        "importance": 0.0237
+      },
+      {
+        "feature": "HistoryOfBacklogs_No",
+        "importance": 0.013
+      },
+      {
+        "feature": "AttendancePercent",
+        "importance": 0.0106
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 0.0102
+      },
+      {
+        "feature": "AptitudeTestScore",
+        "importance": 0.0082
+      }
+    ],
+    "cm_plot": "decision_tree_confusion_matrix.png",
+    "roc_plot": "decision_tree_roc_curve.png",
+    "feat_plot": "decision_tree_feature_importance.png"
+  },
+  "random_forest": {
+    "id": "random_forest",
+    "name": "Random Forest Classifier",
+    "short_name": "Random Forest",
+    "module": "M3",
+    "type": "Ensemble (Bagging)",
+    "description": "Bagged ensemble of de-correlated decision trees with feature subsampling (\\sqrt{p}) reducing variance over tabular student metrics.",
+    "formula": "\\hat{f}_{rf}(x) = \\frac{1}{B} \\sum_{b=1}^B f_b(x)",
+    "hyperparams": {
+      "n_estimators": 80,
+      "max_depth": 12,
+      "max_features": "sqrt",
+      "n_jobs": -1
+    },
+    "train_time_sec": 0.514,
+    "inference_latency_ms": 0.003,
+    "accuracy": 0.9163,
+    "precision": 0.9144,
+    "recall": 0.9627,
+    "f1_score": 0.9379,
+    "roc_auc": 0.9766,
+    "log_loss": 0.1912,
+    "confusion_matrix": {
+      "tn": 2837,
+      "fp": 592,
+      "fn": 245,
+      "tp": 6326
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 0.2806
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 0.1412
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": 0.1284
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.0806
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 0.0677
+      },
+      {
+        "feature": "AttendancePercent",
+        "importance": 0.0489
+      },
+      {
+        "feature": "Certifications",
+        "importance": 0.0466
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.0413
+      },
+      {
+        "feature": "AptitudeTestScore",
+        "importance": 0.0404
+      },
+      {
+        "feature": "Workshops",
+        "importance": 0.0269
+      }
+    ],
+    "cm_plot": "random_forest_confusion_matrix.png",
+    "roc_plot": "random_forest_roc_curve.png",
+    "feat_plot": "random_forest_feature_importance.png"
+  },
+  "gradient_boosting": {
+    "id": "gradient_boosting",
+    "name": "Gradient Boosting Classifier",
+    "short_name": "Gradient Boosting",
+    "module": "M3",
+    "type": "Ensemble (Boosting)",
+    "description": "Sequential functional gradient descent iteratively fitting shallow regression trees to pseudo-residuals of log-loss.",
+    "formula": "F_m(x) = F_{m-1}(x) + \\gamma_m h_m(x)",
+    "hyperparams": {
+      "n_estimators": 70,
+      "learning_rate": 0.1,
+      "max_depth": 4,
+      "subsample": 0.8
+    },
+    "train_time_sec": 6.23,
+    "inference_latency_ms": 0.001,
+    "accuracy": 0.9197,
+    "precision": 0.9256,
+    "recall": 0.9545,
+    "f1_score": 0.9398,
+    "roc_auc": 0.9786,
+    "log_loss": 0.1798,
+    "confusion_matrix": {
+      "tn": 2925,
+      "fp": 504,
+      "fn": 299,
+      "tp": 6272
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 0.5855
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.1233
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 0.0715
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 0.0659
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": 0.0512
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.0424
+      },
+      {
+        "feature": "HistoryOfBacklogs_No",
+        "importance": 0.0224
+      },
+      {
+        "feature": "HistoryOfBacklogs_Yes",
+        "importance": 0.0134
+      },
+      {
+        "feature": "AptitudeTestScore",
+        "importance": 0.0078
+      },
+      {
+        "feature": "AttendancePercent",
+        "importance": 0.0074
+      }
+    ],
+    "cm_plot": "gradient_boosting_confusion_matrix.png",
+    "roc_plot": "gradient_boosting_roc_curve.png",
+    "feat_plot": "gradient_boosting_feature_importance.png"
+  },
+  "adaboost": {
+    "id": "adaboost",
+    "name": "AdaBoost Classifier",
+    "short_name": "AdaBoost",
+    "module": "M3",
+    "type": "Adaptive Boosting",
+    "description": "Adaptive boosting algorithm adjusting sample weights dynamically to penalize misclassified student profiles with decision stumps.",
+    "formula": "w_{i}^{(m+1)} = w_i^{(m)} \\exp(-\\alpha_m y_i h_m(x_i))",
+    "hyperparams": {
+      "n_estimators": 50,
+      "learning_rate": 0.8
+    },
+    "train_time_sec": 1.609,
+    "inference_latency_ms": 0.002,
+    "accuracy": 0.9069,
+    "precision": 0.9154,
+    "recall": 0.9457,
+    "f1_score": 0.9303,
+    "roc_auc": 0.9709,
+    "log_loss": 0.411,
+    "confusion_matrix": {
+      "tn": 2855,
+      "fp": 574,
+      "fn": 357,
+      "tp": 6214
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 0.2216
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 0.1768
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.152
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 0.1226
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": 0.0897
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.0865
+      },
+      {
+        "feature": "HistoryOfBacklogs_No",
+        "importance": 0.0463
+      },
+      {
+        "feature": "Certifications",
+        "importance": 0.0365
+      },
+      {
+        "feature": "Publications",
+        "importance": 0.0319
+      },
+      {
+        "feature": "HistoryOfBacklogs_Yes",
+        "importance": 0.0286
+      }
+    ],
+    "cm_plot": "adaboost_confusion_matrix.png",
+    "roc_plot": "adaboost_roc_curve.png",
+    "feat_plot": "adaboost_feature_importance.png"
+  },
+  "xgboost": {
+    "id": "xgboost",
+    "name": "XGBoost Classifier",
+    "short_name": "XGBoost",
+    "module": "M3",
+    "type": "Extreme Gradient Boosting",
+    "description": "Second-order Taylor gradient expansion with histogram-based split finding and L1/L2 leaf regularization.",
+    "formula": "\\mathcal{L}^{(t)} \\approx \\sum [g_i f_t(x_i) + \\frac{1}{2} h_i f_t^2(x_i)] + \\Omega(f_t)",
+    "hyperparams": {
+      "n_estimators": 80,
+      "learning_rate": 0.08,
+      "max_depth": 5,
+      "eval_metric": "logloss"
+    },
+    "train_time_sec": 0.186,
+    "inference_latency_ms": 0.0,
+    "accuracy": 0.919,
+    "precision": 0.9237,
+    "recall": 0.9557,
+    "f1_score": 0.9394,
+    "roc_auc": 0.9787,
+    "log_loss": 0.175,
+    "confusion_matrix": {
+      "tn": 2910,
+      "fp": 519,
+      "fn": 291,
+      "tp": 6280
+    },
+    "top_features": [
+      {
+        "feature": "CGPA",
+        "importance": 0.279
+      },
+      {
+        "feature": "Projects",
+        "importance": 0.2225
+      },
+      {
+        "feature": "MockInterviewScore",
+        "importance": 0.1061
+      },
+      {
+        "feature": "Internships",
+        "importance": 0.082
+      },
+      {
+        "feature": "SoftSkillsRating",
+        "importance": 0.0729
+      },
+      {
+        "feature": "HistoryOfBacklogs_No",
+        "importance": 0.0536
+      },
+      {
+        "feature": "CodingTestScore",
+        "importance": 0.0502
+      },
+      {
+        "feature": "Certifications",
+        "importance": 0.0242
+      },
+      {
+        "feature": "Publications",
+        "importance": 0.0139
+      },
+      {
+        "feature": "AptitudeTestScore",
+        "importance": 0.0126
+      }
+    ],
+    "cm_plot": "xgboost_confusion_matrix.png",
+    "roc_plot": "xgboost_roc_curve.png",
+    "feat_plot": "xgboost_feature_importance.png"
+  }
+}

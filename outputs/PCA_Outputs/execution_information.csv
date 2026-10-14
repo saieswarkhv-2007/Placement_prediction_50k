@@ -1,0 +1,9 @@
+Item,Details
+Input Dataset,/Users/khvsaieswar/Desktop/Placement_prediction/dataset/final_preprocess_M2.csv
+Output Folder,/Users/khvsaieswar/Desktop/Placement_prediction/outputs/PCA_Outputs
+Features Used,All numeric attributes
+PCA Method,Principal Component Analysis
+Scaling Method,StandardScaler
+Missing Value Handling,Median imputation
+Variance Retention Analysis,"80%, 90%, 95%"
+Original Dataset Modified,NO

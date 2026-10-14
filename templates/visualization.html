@@ -1,49 +1,440 @@
 {% extends "base.html" %}
 
-
-{% block title %}Visualization{% endblock %}
-
+{% block title %}Module Visualizations (M1 &ndash; M6) — PlacementPredict{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="tag tag-primary" style="margin-bottom: 8px;">Curriculum M1 &ndash; M6 Deep Dive</span>
+    <h1>Machine Learning Visualizations & Theory</h1>
+    <p>
+      Comprehensive interactive visualizations mapped to each of the six modules in the university placement prediction curriculum.
+    </p>
+  </div>
 
+  <!-- Interactive Module Navigation Tabs -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="openModuleTab(event, 'tab-m1')">
+      M1. ML Lifecycle & System
+    </button>
+    <button class="tab-btn" onclick="openModuleTab(event, 'tab-m2')">
+      M2. Linear & Logistic Models
+    </button>
+    <button class="tab-btn" onclick="openModuleTab(event, 'tab-m3')">
+      M3. Tree-Based Models
+    </button>
+    <button class="tab-btn" onclick="openModuleTab(event, 'tab-m4')">
+      M4. Unsupervised Learning
+    </button>
+    <button class="tab-btn" onclick="openModuleTab(event, 'tab-m5')">
+      M5. Evaluation & Calibration
+    </button>
+    <button class="tab-btn" onclick="openModuleTab(event, 'tab-m6')">
+      M6. Production ML Engineering
+    </button>
+  </div>
 
-<div class="page">
+  <!-- TAB M1: PlacementPredict as a System — The ML Lifecycle -->
+  <div id="tab-m1" class="tab-content active">
+    <div class="module-header">
+      <span class="module-badge">Module 1</span>
+      <h2>M1. PlacementPredict as a System — The ML Lifecycle</h2>
+      <p>
+        A working prediction service running on day one. Tracing student inference end-to-end, the 8-stage ML lifecycle, 
+        and the critical training-serving boundary that prevents production bugs.
+      </p>
+    </div>
 
+    <!-- Lifecycle Diagram -->
+    <div class="card" style="margin-bottom: 24px;">
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px;">The Complete Machine Learning Lifecycle</h3>
+      <div class="lifecycle-diagram">
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 1</div>
+          <div class="step-title">Raw Data Ingestion</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 2</div>
+          <div class="step-title">Cleaned Dataset</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 3</div>
+          <div class="step-title">Engineered Features</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 4</div>
+          <div class="step-title">Trained Model</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 5</div>
+          <div class="step-title">Packaged Artifact</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 6</div>
+          <div class="step-title">Served Endpoint</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 7</div>
+          <div class="step-title">Monitored Prod</div>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step">
+          <div class="step-num">Stage 8</div>
+          <div class="step-title">Retraining Loop</div>
+        </div>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        <strong>Where each stage lives in code:</strong> Data pipeline scripts live in <code>src/</code>, feature transformers in <code>ml_engine.py</code>, trained artifacts in <code>models/</code>, and serving in <code>app.py</code> with production logging in <code>outputs/prediction_history.json</code>.
+      </p>
+    </div>
 
-   <h1>Data Visualization</h1>
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Target Class Balance (50K Students)</h3>
+          <p>Supervised binary classification ground-truth distribution</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m1_target_distribution.png') }}" alt="Target Distribution">
+        </div>
+        <div class="visual-card-footer">
+          Distribution: 32,856 Placed (65.7%) vs 17,144 Not Placed (34.3%). Stratified splits maintain this ratio in train/test splits.
+        </div>
+      </div>
 
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Feature Correlation Matrix Heatmap</h3>
+          <p>Pairwise Pearson correlations across academic and technical scores</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m1_correlation_heatmap.png') }}" alt="Correlation Heatmap">
+        </div>
+        <div class="visual-card-footer">
+          Demonstrates multicollinearity and direct feature relevance prior to model induction.
+        </div>
+      </div>
+    </div>
+  </div>
 
-   <div class="cards">
+  <!-- TAB M2: Supervised Learning — Linear Models at Depth -->
+  <div id="tab-m2" class="tab-content">
+    <div class="module-header">
+      <span class="module-badge">Module 2</span>
+      <h2>M2. Supervised Learning — Linear Models at Depth</h2>
+      <p>
+        Linear & Logistic Regression revisited: Closed-form normal equations vs gradient descent, 
+        regularisation (Ridge L2, Lasso L1, Elastic Net), the sigmoid activation, and the hyperplane decision boundary.
+      </p>
+    </div>
 
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Sigmoid Activation Function</h3>
+          <p>Mapping linear combination $z = w^T X + b$ to probability space [0, 1]</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m2_sigmoid_curve.png') }}" alt="Sigmoid Curve">
+        </div>
+        <div class="visual-card-footer">
+          Formula: $\sigma(z) = \frac{1}{1 + e^{-z}}$. Decision boundary set at $\sigma(z) = 0.5 \iff w^T X + b = 0$.
+        </div>
+      </div>
 
-       <div class="card">
-           <h3>Placement Distribution</h3>
-           <p>Placed vs Not Placed visualization.</p>
-       </div>
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Binary Cross-Entropy Loss Dynamics</h3>
+          <p>Log-loss penalties for correct and incorrect placement predictions</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m2_cross_entropy_loss.png') }}" alt="Cross Entropy Loss">
+        </div>
+        <div class="visual-card-footer">
+          Loss $\mathcal{L} = -[y \log(\hat{y}) + (1-y)\log(1-\hat{y})]$. Heavy convex penalization when predicting 0 for placed students.
+        </div>
+      </div>
 
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>L1 vs L2 Regularization Geometry</h3>
+          <p>Diamond (L1) vs Circle (L2) constraint regions explaining sparsity induction</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m2_l1_vs_l2.png') }}" alt="L1 vs L2 Regularization">
+        </div>
+        <div class="visual-card-footer">
+          Lasso (L1) corners intersect elliptical loss contours at zero axes, naturally selecting sparse feature subsets.
+        </div>
+      </div>
 
-       <div class="card">
-           <h3>CGPA Analysis</h3>
-           <p>CGPA and placement relationship.</p>
-       </div>
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Gradient Descent Cost Convergence</h3>
+          <p>Loss reduction across training epochs under batch gradient descent</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m2_gradient_descent_loss.png') }}" alt="Gradient Descent Convergence">
+        </div>
+        <div class="visual-card-footer">
+          StandardScaler ensures isotropic loss contours, accelerating gradient descent convergence.
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- TAB M3: Supervised Learning — Tree-Based Models -->
+  <div id="tab-m3" class="tab-content">
+    <div class="module-header">
+      <span class="module-badge">Module 3</span>
+      <h2>M3. Supervised Learning — Tree-Based Models</h2>
+      <p>
+        From greedy top-down recursive decision trees to modern ensemble workhorses: Random Forests bagging, 
+        AdaBoost, Gradient Boosting, and XGBoost. Interpreting feature importances on tabular datasets.
+      </p>
+    </div>
 
-       <div class="card">
-           <h3>Department Analysis</h3>
-           <p>Department-wise placement analysis.</p>
-       </div>
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Decision Tree Architecture Diagram</h3>
+          <p>Greedy axis-aligned splits optimizing Gini Impurity $I_G = 1 - \sum p_i^2$</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m3_decision_tree_diagram.png') }}" alt="Decision Tree Diagram">
+        </div>
+        <div class="visual-card-footer">
+          Pre-pruned to <code>max_depth=8</code> and <code>min_samples_leaf=5</code> to avoid high-variance overfitting.
+        </div>
+      </div>
 
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Random Forest Feature Importances</h3>
+          <p>Mean Decrease in Impurity (MDI) across 80 de-correlated trees</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m3_tree_feature_importance.png') }}" alt="Feature Importance">
+        </div>
+        <div class="visual-card-footer">
+          <code>CGPA</code>, <code>CodingTestScore</code>, and <code>Internships</code> dominate split value reductions.
+        </div>
+      </div>
+    </div>
 
-       <div class="card">
-           <h3>Correlation Matrix</h3>
-           <p>Relationship between numerical features.</p>
-       </div>
+    <!-- Tree Models Comparison Grid -->
+    <div class="grid-cards" style="margin-top: 10px;">
+      <div class="card">
+        <h4 style="color: var(--primary); margin-bottom: 6px;">🌲 Decision Tree</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          Single interpretable tree. Fast and transparent, but prone to high variance without aggressive pruning.
+        </p>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--accent); margin-bottom: 6px;">🌳 Random Forest</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          Bagging (bootstrap aggregation) with random feature subsampling ($\sqrt{p}$). Drastically dampens individual tree variance.
+        </p>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--success); margin-bottom: 6px;">🚀 Gradient Boosting & XGBoost</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          Functional gradient descent iteratively correcting residual errors. Industrial standard workhorses for tabular Kaggle data.
+        </p>
+      </div>
+    </div>
+  </div>
 
+  <!-- TAB M4: Unsupervised Learning -->
+  <div id="tab-m4" class="tab-content">
+    <div class="module-header">
+      <span class="module-badge">Module 4</span>
+      <h2>M4. Unsupervised Learning — Clustering, PCA & Anomaly Detection</h2>
+      <p>
+        K-Means clustering with Elbow and Silhouette optimization, PCA dimensionality reduction, 
+        and Isolation Forest anomaly detection identifying atypical student profiles.
+      </p>
+    </div>
 
-   </div>
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>PCA 2D Projection of Student Cohort</h3>
+          <p>First two principal components capturing primary variance in academic attributes</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m4_pca_projection.png') }}" alt="PCA 2D Projection">
+        </div>
+        <div class="visual-card-footer">
+          Clear visual separation: High-CGPA/high-coding students cluster on the right (placed), while low-metric students cluster left.
+        </div>
+      </div>
 
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>K-Means Elbow Method (Inertia Curve)</h3>
+          <p>Within-cluster sum of squares across cluster count $K \in [2, 7]$</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m4_kmeans_elbow.png') }}" alt="K-Means Elbow Curve">
+        </div>
+        <div class="visual-card-footer">
+          Optimal inflection point identified at $K=3$ (Elite Candidates, Core Average, At-Risk profiles).
+        </div>
+      </div>
 
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>PCA Scree Plot (Eigenvalue Decay)</h3>
+          <p>Explained variance percentage per individual principal component</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m4_pca_scree.png') }}" alt="PCA Scree Plot">
+        </div>
+        <div class="visual-card-footer">
+          First 4 components capture over 55% of total dataset variance across 32 original dimensions.
+        </div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>PCA Cumulative Explained Variance</h3>
+          <p>Cumulative information threshold analysis (80%, 90%, 95%)</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m4_pca_cumulative.png') }}" alt="Cumulative Variance">
+        </div>
+        <div class="visual-card-footer">
+          19 components are sufficient to retain 95% total variance, enabling drastic compression without predictive loss.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB M5: Model Evaluation, Selection, and Calibration -->
+  <div id="tab-m5" class="tab-content">
+    <div class="module-header">
+      <span class="module-badge">Module 5</span>
+      <h2>M5. Model Evaluation, Selection, and Calibration</h2>
+      <p>
+        Evaluation discipline: Stratified holdout splits, confusion matrices, ROC-AUC vs PR-AUC trade-offs, 
+        and probability calibration (ensuring a 0.70 predicted probability means exactly 70% empirical placement rate).
+      </p>
+    </div>
+
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Multi-Model ROC Comparison Curves</h3>
+          <p>Receiver Operating Characteristic curves across all 6 classification models</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m5_multi_model_roc.png') }}" alt="Multi-Model ROC">
+        </div>
+        <div class="visual-card-footer">
+          Gradient Boosting (AUC = 0.979) and XGBoost (AUC = 0.979) lead the benchmark, closely followed by Random Forest (0.977).
+        </div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Precision-Recall (PR) Curves</h3>
+          <p>Precision vs Recall trade-offs under class balance considerations</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m5_multi_model_pr.png') }}" alt="Precision-Recall Curves">
+        </div>
+        <div class="visual-card-footer">
+          High precision maintained across recall spectrum >0.90, confirming minimal false positive placements.
+        </div>
+      </div>
+    </div>
+
+    <div class="visual-card" style="margin-bottom: 24px;">
+      <div class="visual-card-header">
+        <h3>Model Performance Benchmark (Accuracy vs F1-Score)</h3>
+        <p>Comparative summary of testing results on 10,000 holdout student instances</p>
+      </div>
+      <div class="visual-card-body">
+        <img src="{{ url_for('static', filename='generated_plots/m5_leaderboard_bar.png') }}" alt="Model Benchmark Bar Chart">
+      </div>
+      <div class="visual-card-footer">
+        Every model achieves >90.4% accuracy, demonstrating high discriminatory signal in university placement attributes.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB M6: ML Engineering — From Notebook to Production -->
+  <div id="tab-m6" class="tab-content">
+    <div class="module-header">
+      <span class="module-badge">Module 6</span>
+      <h2>M6. ML Engineering — From Notebook to Production</h2>
+      <p>
+        Bridging the notebook-to-production gap: Serialization pitfalls, pipeline encapsulation, 
+        low-latency serving, and data drift monitoring in live inference systems.
+      </p>
+    </div>
+
+    <div class="visual-grid">
+      <div class="visual-card">
+        <div class="visual-card-header">
+          <h3>Production Serving Latency Benchmark</h3>
+          <p>Inference duration per student request in milliseconds (ms)</p>
+        </div>
+        <div class="visual-card-body">
+          <img src="{{ url_for('static', filename='generated_plots/m6_serving_latency.png') }}" alt="Serving Latency">
+        </div>
+        <div class="visual-card-footer">
+          Logistic Regression & Decision Trees achieve sub-millisecond inference; Ensembles execute in &lt;3ms, well within SLA limits.
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px;">Production Serving & Skew Defense Checklist</h3>
+        <ul style="list-style: none; line-height: 1.8; font-size: 0.9rem; color: var(--text-main);">
+          <li>✅ <strong>Pipeline Encapsulation:</strong> Preprocessor + Estimator serialized together in <code>.pkl</code> to avoid missing-transform bugs.</li>
+          <li>✅ <strong>Point-in-Time Correctness:</strong> Only features known prior to placement offer are fed into classifier.</li>
+          <li>✅ <strong>Data Drift Defense:</strong> Online request distributions logged to <code>prediction_history.json</code> for periodic Kolmogorov-Smirnov drift testing.</li>
+          <li>✅ <strong>Dual Prediction Architecture:</strong> Binary placement classification combined with secondary salary regression on positive predictions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
+{% endblock %}
 
+{% block extra_scripts %}
+<script>
+function openModuleTab(evt, tabId) {
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach(c => c.classList.remove('active'));
+  
+  const buttons = document.querySelectorAll('.tab-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(tabId).classList.add('active');
+  evt.currentTarget.classList.add('active');
+}
 
+// Support direct hash linking (e.g. #tab-m3)
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash;
+  if (hash) {
+    const targetTab = document.querySelector(hash);
+    const targetBtn = document.querySelector(`button[onclick*="${hash.replace('#', '')}"]`);
+    if (targetTab && targetBtn) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      targetTab.classList.add('active');
+      targetBtn.classList.add('active');
+    }
+  }
+});
+</script>
 {% endblock %}

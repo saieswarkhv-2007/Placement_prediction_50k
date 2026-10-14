@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  placement-predict:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: placement-prediction-system:latest
+    container_name: placement_prediction_service
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - FLASK_ENV=production
+    restart: unless-stopped

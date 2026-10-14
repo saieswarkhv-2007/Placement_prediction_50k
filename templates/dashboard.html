@@ -1,57 +1,244 @@
 {% extends "base.html" %}
 
-
-{% block title %}Dashboard{% endblock %}
-
+{% block title %}Placement Analytics Dashboard — PlacementPredict{% endblock %}
 
 {% block content %}
+<div class="container">
+  <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span class="tag tag-primary" style="margin-bottom: 8px;">Analytics & Inference Telemetry</span>
+      <h1>Placement Analytics Dashboard</h1>
+      <p>
+        Real-time telemetry and aggregated visualization of student placement inference requests, probability distributions, 
+        and model utilization.
+      </p>
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="{{ url_for('prediction') }}" class="btn btn-primary btn-sm">
+        + New Prediction
+      </a>
+      <form action="{{ url_for('dashboard') }}" method="POST" style="margin: 0; display: inline;">
+        <input type="hidden" name="action" value="clear">
+        <button type="submit" class="btn btn-secondary btn-sm" onclick="return confirm('Clear prediction telemetry history?');">
+          🗑️ Clear History
+        </button>
+      </form>
+    </div>
+  </div>
 
+  <!-- KPI Cards -->
+  <div class="grid-cards" style="margin-bottom: 30px;">
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Total Predictions Logged</div>
+        <div class="kpi-val">{{ analytics.total_predictions }}</div>
+        <div class="kpi-sub">Inference Requests Served</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">🔢</div>
+    </div>
 
-<div class="page">
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Predicted Placement Rate</div>
+        <div class="kpi-val" style="color: #059669;">{{ analytics.placement_rate }}%</div>
+        <div class="kpi-sub">
+          {{ analytics.placed_count }} Placed / {{ analytics.not_placed_count }} Not Placed
+        </div>
+      </div>
+      <div class="kpi-icon" style="background: #d1fae5; color: #059669;">🎯</div>
+    </div>
 
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Average Probability</div>
+        <div class="kpi-val" style="color: #0284c7;">{{ analytics.avg_probability }}%</div>
+        <div class="kpi-sub">Mean Confidence Across Cohort</div>
+      </div>
+      <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;">📊</div>
+    </div>
 
-   <h1>Placement Dashboard</h1>
+    <div class="kpi-card">
+      <div>
+        <div class="kpi-label">Average Student CGPA</div>
+        <div class="kpi-val">{{ analytics.avg_cgpa }}</div>
+        <div class="kpi-sub">Top Model: {{ analytics.top_model }}</div>
+      </div>
+      <div class="kpi-icon" style="background: #fef3c7; color: #d97706;">🎓</div>
+    </div>
+  </div>
 
+  <!-- Charts Row -->
+  <div class="visual-grid" style="margin-bottom: 36px;">
+    <!-- Outcome Distribution Chart -->
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Placement Outcome Distribution</h3>
+        <p>Proportion of candidates classified as Placed vs At-Risk</p>
+      </div>
+      <div class="visual-card-body" style="flex-direction: column; padding: 24px;">
+        {% if analytics.total_predictions > 0 %}
+          <div style="width: 100%; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px;">
+              <span style="color: #059669;">Placed: {{ analytics.placed_count }} ({{ analytics.placement_rate }}%)</span>
+              <span style="color: #dc2626;">Not Placed: {{ analytics.not_placed_count }} ({{ (100 - analytics.placement_rate)|round(1) }}%)</span>
+            </div>
+            <div style="height: 22px; width: 100%; display: flex; border-radius: var(--radius-full); overflow: hidden; background: #e2e8f0;">
+              <div style="width: {{ analytics.placement_rate }}%; background: #059669; height: 100%;"></div>
+              <div style="width: {{ 100 - analytics.placement_rate }}%; background: #dc2626; height: 100%;"></div>
+            </div>
+          </div>
 
-   <div class="cards">
+          <div style="display: flex; gap: 20px; font-size: 0.85rem; color: var(--text-muted);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width: 12px; height: 12px; background: #059669; border-radius: 3px;"></div>
+              Placed (Eligible for Corporate Offer)
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width: 12px; height: 12px; background: #dc2626; border-radius: 3px;"></div>
+              Not Placed (Remedial Action Required)
+            </div>
+          </div>
+        {% else %}
+          <p style="color: var(--text-muted);">No predictions logged yet. Run a prediction to see live distribution.</p>
+        {% endif %}
+      </div>
+    </div>
 
+    <!-- Model Usage Share -->
+    <div class="visual-card">
+      <div class="visual-card-header">
+        <h3>Model Selection Breakdown</h3>
+        <p>Telemetry showing which algorithms are invoked for inference</p>
+      </div>
+      <div class="visual-card-body" style="padding: 24px; flex-direction: column; align-items: stretch;">
+        {% if analytics.model_usage %}
+          {% for m_name, count in analytics.model_usage.items() %}
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                <span>{{ m_name }}</span>
+                <span>{{ count }} runs ({{ ((count / analytics.total_predictions) * 100)|round(1) }}%)</span>
+              </div>
+              <div style="height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                <div style="width: {{ (count / analytics.total_predictions) * 100 }}%; background: var(--primary); height: 100%;"></div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p style="color: var(--text-muted); text-align: center;">No model usage data recorded.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 
-       <div class="card">
-           <h3>Total Students</h3>
-           <h2>--</h2>
-       </div>
+  <!-- CGPA vs Placement Probability Scatter Visualization -->
+  <div class="card" style="margin-bottom: 36px;">
+    <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">CGPA vs Placement Probability Telemetry</h3>
+    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+      Empirical scatter plot of live candidate inference requests relative to the 50% decision hyperplane.
+    </p>
 
+    <div style="position: relative; height: 260px; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 40px 40px 50px;">
+      <!-- Y-Axis labels -->
+      <div style="position: absolute; left: 10px; top: 15px; font-size: 0.72rem; color: var(--text-muted);">100%</div>
+      <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.72rem; color: var(--text-muted);">50%</div>
+      <div style="position: absolute; left: 10px; bottom: 35px; font-size: 0.72rem; color: var(--text-muted);">0%</div>
 
-       <div class="card">
-           <h3>Placed Students</h3>
-           <h2>--</h2>
-       </div>
+      <!-- 50% Decision Line -->
+      <div style="position: absolute; left: 50px; right: 20px; top: 50%; height: 1px; border-top: 1px dashed #94a3b8; pointer-events: none;">
+        <span style="position: absolute; right: 0; top: -18px; font-size: 0.7rem; color: #94a3b8; background: #fff; padding: 0 4px;">
+          Decision Boundary (50%)
+        </span>
+      </div>
 
+      <!-- X-Axis labels -->
+      <div style="position: absolute; left: 50px; bottom: 10px; font-size: 0.72rem; color: var(--text-muted);">CGPA 5.0</div>
+      <div style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; font-size: 0.72rem; color: var(--text-muted);">CGPA 7.5</div>
+      <div style="position: absolute; right: 20px; bottom: 10px; font-size: 0.72rem; color: var(--text-muted);">CGPA 10.0</div>
 
-       <div class="card">
-           <h3>Not Placed</h3>
-           <h2>--</h2>
-       </div>
+      <!-- Plot Area -->
+      <div style="position: relative; width: 100%; height: 100%;">
+        {% for pt in analytics.scatter_data %}
+          {% set left_pct = (((pt.cgpa - 5.0) / 5.0) * 100)|round(1) %}
+          {% set bottom_pct = pt.prob %}
+          {% if left_pct >= 0 and left_pct <= 100 and bottom_pct >= 0 and bottom_pct <= 100 %}
+            <div title="CGPA: {{ pt.cgpa }}, Prob: {{ pt.prob }}%, Status: {{ pt.status }} ({{ pt.model }})"
+                 style="position: absolute; left: {{ left_pct }}%; bottom: {{ bottom_pct }}%; 
+                        width: 14px; height: 14px; border-radius: 50%; transform: translate(-50%, 50%);
+                        background: {% if pt.status == 'Placed' %}#10b981{% else %}#ef4444{% endif %};
+                        border: 2px solid #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); cursor: pointer;">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
+  <!-- Recent Prediction Logs Table -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 800;">Recent Predictions Log</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Live audit trail of inference requests processed by the serving layer.</p>
+      </div>
+      <span class="tag tag-primary">{{ analytics.recent_history|length }} Most Recent Requests</span>
+    </div>
 
-       <div class="card">
-           <h3>Placement Percentage</h3>
-           <h2>--%</h2>
-       </div>
-
-
-   </div>
-
-
-   <h2>Placement Analytics</h2>
-
-
-   <div class="chart-placeholder">
-       Placement charts will appear here.
-   </div>
-
-
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Timestamp</th>
+            <th>Model Used</th>
+            <th>CGPA</th>
+            <th>Stream</th>
+            <th>Backlogs</th>
+            <th>Internships</th>
+            <th>Coding</th>
+            <th>Probability</th>
+            <th>Placement Status</th>
+            <th>Salary Estimate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if analytics.recent_history %}
+            {% for item in analytics.recent_history %}
+            <tr>
+              <td><code>{{ item.id }}</code></td>
+              <td style="color: var(--text-muted); font-size: 0.84rem;">{{ item.timestamp }}</td>
+              <td><strong>{{ item.model_name }}</strong></td>
+              <td><strong>{{ item.cgpa }}</strong></td>
+              <td><span class="tag tag-accent">{{ item.stream }}</span></td>
+              <td>{{ item.backlogs }}</td>
+              <td>{{ item.internships }}</td>
+              <td>{{ item.coding_score }}</td>
+              <td>
+                <strong style="color: {% if item.status == 'Placed' %}#059669{% else %}#dc2626{% endif %};">
+                  {{ item.probability }}%
+                </strong>
+              </td>
+              <td>
+                {% if item.status == 'Placed' %}
+                  <span class="tag tag-success">Placed</span>
+                {% else %}
+                  <span class="tag tag-danger">Not Placed</span>
+                {% endif %}
+              </td>
+              <td>
+                <strong style="color: #059669;">{{ item.salary_package }}</strong>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="11" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                No prediction history available. <a href="{{ url_for('prediction') }}">Run your first prediction</a>.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}
